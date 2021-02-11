@@ -55,7 +55,7 @@ def extraerOctantes(image, centro, debug = False):
             ancho = 100
             alto = 50
             x,y = int(M/2),int(N/2)
-            I = rotate(Ishift, angulos[i], preserve_range=True).astype(Ishift.dtype)
+            I = rotate(Ishift, angulos[i], preserve_range=True,order=5).astype(Ishift.dtype)
             
 
             
@@ -132,11 +132,11 @@ def detectarCorteEnOctante(IsegScaled,centro,debug=False):
 #%%
 
 if __name__=="__main__":    
-    base='base/sinManchas/'
+    base='../base/sinManchas/'
     filename = ['F10A.tif','F10B.tif','F2Ab.tif','F2B.tif','F4A.tif','F4A_rot.tif']
     centros =  [ [888,779],[850,968],[1208,1300],[1039,1068],[1033,878],[1019,826] ]
 
-    indice = 5 #TP
+    indice = 1 #TP
 
     img_orig = imageio.imread(base+filename[indice])
     
@@ -149,7 +149,7 @@ if __name__=="__main__":
     
     img_seg = utils.segmentarImagen(image)
     
-    debug = False
+    debug = True
     if debug:
         utils.image_show(image)
     print(detectarCorteEnOctante( img_seg, centro, debug = debug))
