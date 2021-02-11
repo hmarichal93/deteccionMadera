@@ -225,7 +225,7 @@ def calcularSegmento():
             if 1>= np.abs((m*x_i + n - y_i)): 
                     coordenadas.append([y_i,x_i])
                                 
-    print(len(coordenadas))
+    #print(len(coordenadas))
     return coordenadas
         
 
@@ -235,13 +235,19 @@ if __name__=="__main__":
     global coordsSeg
     ptosCardinales = ['N','NE','E','SE','S','SW','W','NW']
     debug = False
+    # Segmento se configura en True si se desea realizar seleccionar el segmento a etiquetar.
+    # En caso contrario se extraen los 8 radios.
     segmento = False
+    # Si es true se realiza la seleccion de radios acumulados de manera manual. En caso contrario hay que indicar 
+    # los radios acumulados.
     semiAutomatic = True
-
+    
+    # Modelo a utilizar
     modelName = 'modelos/finalized_model_smallBase.sav'
     #modelName = 'finalized_model_bigDatabase.sav'
 
     base='base/sinManchas/'
+    # Imagenes de discos que se desean utilizar
     filename = ['F10B.tif','F4A_rot.tif']
     centros = [[850,968],[1019,826]]
     indice = 1
