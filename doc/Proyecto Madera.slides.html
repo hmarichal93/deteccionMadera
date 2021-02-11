@@ -13237,7 +13237,7 @@ a.anchor-link {
 </tr>
 </tbody>
 </table>
-<p>Figura 1.1/1 Imagenes de disco de tronco original y amplificada.</p>
+<p>Figura 1.1/2 Imagenes de disco de tronco original y amplificada.</p>
 
 </div>
 </div>
@@ -13343,7 +13343,7 @@ a.anchor-link {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Luego de tener los octantes, se comparación utilizando descriptores ORB contra una imagen con rajadura y otra sin. La imagen contra la que se tenga más matches es la que determina la clasificación del octante.  Se utiliza la implementación de <strong>openCV</strong> para el calculo de los descriptrores ORB.</p>
+<p>Luego de tener los octantes, se comparan utilizando descriptores ORB contra una imagen con rajadura y otra sin. La imagen contra la que se tenga más matches es la que determina la clasificación del octante.  Se utiliza la implementación de <strong>openCV</strong> para el calculo de los descriptrores ORB.</p>
 <table>
 <thead><tr>
 <th style="text-align:center"></th>
@@ -13425,15 +13425,15 @@ a.anchor-link {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="3-Software">3 Software<a class="anchor-link" href="#3-Software">&#182;</a></h1><p>El código de la aplicación se encuentra en el repositorio GitHub <a href="https://github.com/hmarichal93/deteccionMadera">https://github.com/hmarichal93/deteccionMadera</a></p>
-
+<h1 id="3-Software">3 Software<a class="anchor-link" href="#3-Software">&#182;</a></h1>
 </div>
 </div>
-</div>
+</div></section><section>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="3.1-Bibliotecas-utilizadas">3.1 Bibliotecas utilizadas<a class="anchor-link" href="#3.1-Bibliotecas-utilizadas">&#182;</a></h2>
+<p>El código de la aplicación se encuentra en el repositorio GitHub <a href="https://github.com/hmarichal93/deteccionMadera">https://github.com/hmarichal93/deteccionMadera</a></p>
+
 </div>
 </div>
 </div></section></section><section><section>
@@ -13611,8 +13611,56 @@ a.anchor-link {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="5-Analisis-de-Resultados">5 Analisis de Resultados<a class="anchor-link" href="#5-Analisis-de-Resultados">&#182;</a></h1><h2 id="5.1-Selecci&#243;n-de-caracter&#237;sticas">5.1 Selecci&#243;n de caracter&#237;sticas<a class="anchor-link" href="#5.1-Selecci&#243;n-de-caracter&#237;sticas">&#182;</a></h2><p>No se observan mejoras al utilizar la imagen en color
-Entrenamiento.</p>
+<h1 id="5-An&#225;lisis-de-Resultados">5 An&#225;lisis de Resultados<a class="anchor-link" href="#5-An&#225;lisis-de-Resultados">&#182;</a></h1>
+</div>
+</div>
+</div></section><section>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="5.1-Armado-de-base-de-datos">5.1 Armado de base de datos<a class="anchor-link" href="#5.1-Armado-de-base-de-datos">&#182;</a></h2><p>Se cuenta con una base de datos de imagenes y sus metadatos. Los metadatos que se tienen son:</p>
+<ul>
+<li>Radios acumulados en mm para 4 puntos cardinales (Norte, Sur, Este y Oeste)</li>
+<li>Se indica si hay presencia de madera anómala en cada uno de los radios acumulados para los 8 puntos cardinales.</li>
+</ul>
+<p>Muchas de las imagenes presentan manchas negras por lo cuál es necesario realizar una selección de aquellas que tengan menor presencia de las mismas. Con estás se arma una base de datos de 7 imagenes.</p>
+
+</div>
+</div>
+</div></section><section>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="5.2-Entrenamiento-de-modelos">5.2 Entrenamiento de modelos<a class="anchor-link" href="#5.2-Entrenamiento-de-modelos">&#182;</a></h2><p>Con el fin de entrenar el modelo de clasificación utilizando un método de aprendizaje supervisado es necesario transformar las imagenes en vectores etiquetados.</p>
+<p>El primer enfoque consiste en utilizar el archivo de metadatos de manera de automatizar la transformación del conjunto imagen+metadatos en vectores y etiquetas. Un enfoque que se utiliza es obtener los radios acumulados en cada una de las 8 direcciones radiales de los metadatos y convertir los mismos de mm a pixeles. De está manera es posible asociar cada uno de los subperfiles (dentro del perfil) con una etiqueta. Para la conversión se utiliza la información de dpi que se encuentra en los metadatos del formato <strong>tiff</strong> de la imagen.</p>
+
+</div>
+</div>
+</div></section><section>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>En la Figura 5.1 se observa el perfil con los radios determinados con el método descripto anteriormente. Se observa que hay cierto error. Esto puede deberse a que la cámara no estaba calibrada al realizar la fotografía.</p>
+<p>
+    <img src='./entregable/radiosAutomaticos.png'  alt>
+    <center>Figura 5.1 Perfil de dirección norte del disco F10A. El indice 0 refiere al centro del tronco </center>    
+</p>
+</div>
+</div>
+</div></section><section>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Utilizando dicho procedimiento se entrena el modelo <strong>finlized_model_bigDatabase.sav</strong> (datosCrudos.txt). Cómo se mencionó anteriormente a la base de datos de perfiles de longitud variable hay que transformarlos en vectores de longitud fija. Estos vectores de longitud fija son los utilizado en el entrenamiento del modelo.</p>
+<p>Se entrena otro modelo <strong>finalized_model_smallBase.sav</strong>(datosCrudosReducido.txt) extrayendo segmento en direcciones radiales en distintas imagenes, determinando los radios y etiquetas de manera manual.</p>
+
+</div>
+</div>
+</div></section><section>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="5.3-Resultados">5.3 Resultados<a class="anchor-link" href="#5.3-Resultados">&#182;</a></h2><p>Cómo métrica para estimar el desempeño del modelo se utiliza el <strong>f1_score</strong>. Además, para estimar el desempeño de los modelos se utiliza la técnica de validación cruzada en 3 Folds (se utiliza en 3 Folds y no 5 debido al tamaño reducido de las base de datos). Para el modelo <strong>smallBase</strong> se obtiene f1 = 0.3 +- 0.1 mientras que para el modelo <strong>bigDatabase</strong> se tiene 0.19+-0.02. Cómo es de esperar, la base con mayor cantidad de muestras (alrededor de 350 instancias) presenta menor varianza. Sin embargo, también presenta un desempeño menor dado que las mismas presentan ruido. Por otro lado, el modelo <strong>smallBase</strong> al ser entrenado con una cantidad de muestras pequeña (70 instancias) presenta mayor varianza. Pero dado que las instancias se extraen y etiquetan de manera manual la calidad de la base es mayor.</p>
 
 </div>
 </div>
@@ -13620,7 +13668,25 @@ Entrenamiento.</p>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="5-Contacto">5 Contacto<a class="anchor-link" href="#5-Contacto">&#182;</a></h1><p>Correo: hmarichal93@gmail.com</p>
+<h1 id="6-Conclusiones">6 Conclusiones<a class="anchor-link" href="#6-Conclusiones">&#182;</a></h1>
+</div>
+</div>
+</div></section><section>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Se implementa una aplicación que permite detectar de manera razonable la presencia de madera anómala en las direcciones radiales.</p>
+<p>Al utilizarce un modelo de predicción basado en métodos de aprendizaje automático se depende fuertemente de la base de entrenamiento. Cómo se describio la base con mayor cantidad de muestras presenta errores en la extracción de los perfiles correspondientes a cada anillo de crecimiento. Esto repercute negativamente en el desempeño del modelo.</p>
+<p>Por otro lado, en tiempo de ejecución es necesario mejorar la detección automática de los radios correspondientes a los anillos de crecimiento.</p>
+
+</div>
+</div>
+</div></section></section><section><section>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Contacto">Contacto<a class="anchor-link" href="#Contacto">&#182;</a></h1><p>Henry Marichal</p>
+<p>Correo: hmarichal93@gmail.com</p>
 
 </div>
 </div>
