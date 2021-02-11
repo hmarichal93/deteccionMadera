@@ -190,6 +190,7 @@ def buscarBorde(copia,angle,end,radio=0,centro=None):
                 ctrl = False
         i +=1
 
+
     return borde,np.array(y_pix),np.array(x_pix)
 
 def extraerPerfiles(img_seg,centro,debug = False):
@@ -241,9 +242,9 @@ def extraerSubperfiles(perfiles,base,archivo,debug=False):
     print(tif.info['dpi'])
     print(image_resolution)
     if archivo[0]=='F':
-        data = pd.read_csv('fymsa.csv',sep=';')
+        data = pd.read_csv(base+'fymsa.csv',sep=';')
     else:
-        data = pd.read_csv('lumin.csv',sep=';')
+        data = pd.read_csv(base+'lumin.csv',sep=';')
     
     
     partido = re.split(r'\.',archivo)

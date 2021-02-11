@@ -13246,6 +13246,7 @@ a.anchor-link {
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>Es de interes detectar este tipo de madera para disminuír costos económicos en la cadena de producción. Por ejemplo, al aserrar las tablas que se obtienen del tronco del pino, las mismas se “tuercen”, generándose perdidas de material. Además, los distintos tipos de madera, con diferencias en sus propiedades, producen que la madera se seca a distintos niveles de temperatura y humedad generándose contracciones. Induciendose rajado de las laminas.</p>
+<p>El objetivo de este trabajo es implementar un algoritmo semiautomático que permite detectar la presencia de madera de comprensión en el corte de disco de pino.</p>
 
 </div>
 </div>
@@ -13270,9 +13271,9 @@ a.anchor-link {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Para esto se emplea el algoritmo de la Figura 2.1. En ésta se tiene el diagrama de bloques del algoritmo propuesto. Cómo se observa el mismo está compuesto por 4 bloques principales.</p>
+<p>Para esto se emplea el algoritmo de la Figura 2.1. En ésta se tiene el diagrama de bloques del algoritmo propuesto. Cómo se observa el mismo está compuesto por 4 bloques principales. <strong>Cómo parámetro de entrada se requiere las coordenadas del centro del disco.</strong></p>
 <p>
-    <img src='./entregable/algoritmo.png'  style="width:700px;height:500px;">
+    <img src='./entregable/algoritmo.png'  style="width:700px;height:450px;">
     <center>Figura 2.1 Diagrama de bloques algortimo propuesto</center>    
 </p>
 </div>
@@ -13289,7 +13290,8 @@ a.anchor-link {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Se trabaja con la imagen en escala de grises. Además, la misma es segmentada. Para la segmentación se utiliza el algoritmo de Canny para determinar los bordes de toda la imagen cómo se puede observar en la Figura 2.2</p>
+<p>Se trabaja con la imagen en escala de grises. Además, en este bloque se realiza la segmentación de la imagen. La métodología que se utiliza para segmentar la imagen es la siguiente:</p>
+<p>Primero se aplica un filtro de mediana utilizando una ventana circular de radio 5 pixeles para suavizar la imagen. Luego se utiliza el algoritmo de Canny para determinar los bordes de toda la imagen. Se puede observar en la Figura 2.2 el resultado.</p>
 <p>
     <img src='./entregable/canny.png' style="width:400px;height:400px;" >
     <center>Figura 2.2 Detección de bordes con Canny </center>    
@@ -13329,18 +13331,19 @@ a.anchor-link {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Luego de segmentar la imagen se extraen los octantes para su posterior clasificación. El algoritmo para la extracción de los mismos consiste en rotar la imagen secuencialmente 45 grados y extraer el octante "Norte" cada vez. Esto se puede observar en al Figura 2.5. Se rota la imagen 8 veces (45 grados en cada ocasión) extrayedosé el recuadro marcado en rojo en la figura. <strong>Se requiere que el usuario ingrese las coordenadas del centro del disco.</strong></p>
+<p>Luego de segmentar la imagen se extraen los octantes para su posterior clasificación. El procedimiento para extraer los octantes consiste en lo siguiente: Con el fin de aplicar una transformación geométrica de rotación sobre el disco se aplica una traslación del centro del disco hacía el centro de la imagen. Luego se construye una ventana rectangular en el octante norte utilizando la ubicación del centro de la imagen (centro del disco). Está ventana se observan en la Figura 2.5.</p>
 <p>
-    <img src='./entregable/extraccionOctante.png'  style="width:300px;height:300px;">
+    <img src='./entregable/extraccionOctante2.png'  style="width:300px;height:300px;">
     <center>Figura 2.5 Extracción de Octante </center>    
-</p>
+</p><p>Se extrae el primer octante (Norte). A continuación se aplica una rotación central de 45 grados. De está manera se tiene que la ventana está recuadrando el octante Noreste. Se procede nuevamente a extraer el octante y continuar con la rotación central hasta extraer los 8 octantes.</p>
+
 </div>
 </div>
 </div></section><section>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Luego de tener los octantes, se compara utilizando descriptores ORB contra una imagen con rajadura y otra sin. La imagen contra la que se tenga más matches es la que determina la clasificación del octante.</p>
+<p>Luego de tener los octantes, se comparación utilizando descriptores ORB contra una imagen con rajadura y otra sin. La imagen contra la que se tenga más matches es la que determina la clasificación del octante.  Se utiliza la implementación de <strong>openCV</strong> para el calculo de los descriptrores ORB.</p>
 <table>
 <thead><tr>
 <th style="text-align:center"></th>
@@ -13362,7 +13365,13 @@ a.anchor-link {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="2.2-Extracci&#243;n-de-perfiles">2.2 Extracci&#243;n de perfiles<a class="anchor-link" href="#2.2-Extracci&#243;n-de-perfiles">&#182;</a></h2><p>Se utilizan dos algoritmos diferentes para la extracción de perfiles dependiendo si lo que se desea es extraer los 8 radios principales ó un radio (segmento) a elección. Para extraer un radio se necesitan dos puntos. En el caso de los radios principales se tiene que uno de los extremos es el centro (el cuál debe ser ingresado por el usuario) y el otro es el que se encuentra en el borde del tronco a determinado ángulo (dependiendo el perfil de octante que se desee extraer). Comó la imagen está segmentada se puede asumir qué los únicos pixeles con valor de backgroud negro son los  del fondo. De esa manera, es relativamente sencillo (se cuenta con punto de inicio, dirección y condición de parada) determinar cuáles son las coordenadas de los pixeles del perfil que se desea obtener.</p>
+<h2 id="2.2-Extracci&#243;n-de-perfiles">2.2 Extracci&#243;n de perfiles<a class="anchor-link" href="#2.2-Extracci&#243;n-de-perfiles">&#182;</a></h2><p>Luego de determinar los octantes que se deben clasificar es necesario extraer los perfiles correspondiente a los 8 radios principales. Para extraer un radio se necesitan dos puntos. En el caso de los radios principales se tiene que uno de los extremos es el centro (el cuál debe ser ingresado por el usuario) y el otro es el que se encuentra en el borde del tronco a determinado ángulo (dependiendo el perfil de octante que se desee extraer). Cómo la imagen está segmentada se puede asumir qué los únicos pixeles con valor de backgroud negro son los  del fondo. De esa manera, es relativamente sencillo (se cuenta con punto de inicio, dirección y condición de parada) determinar cuáles son las coordenadas de los pixeles del perfil que se desea obtener. Las coordenadas de la imagen que determinan el perfil dado $\alpha$ (ángulo) y ($x_{centro}$,$y_{centro}$) deben cumplir:</p>
+<ul>
+<li>$x_{i}$ = $x_{centro}$ + i* sin($\alpha$)</li>
+<li>$y_{i}$ = $y_{centro}$ + i* cos($\alpha$)</li>
+<li>Imagen[$y_{i}$,$x_{i}$] $\neq $color$\_$background</li>
+</ul>
+<p>Para cualquier <strong>i</strong>.  En la Figura 2.8 se tiene un ejemplo de perfil extraído utilizando este algoritmo.</p>
 
 </div>
 </div>
@@ -13370,7 +13379,6 @@ a.anchor-link {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Por otro lado, cuándo lo que se desea es extraer el perfil dado por dos puntos indicados por el usuario, se extrae el perfil del segmento determinado por ambos puntos.</p>
 <p>
     <img src='./entregable/perfil.png'  alt>
     <center>Figura 2.8 Perfil de dirección norte del disco F10A. El indice 0 refiere al centro del tronco </center>    
@@ -13381,7 +13389,20 @@ a.anchor-link {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="2.3-Determinar-radios-acumulados">2.3 Determinar radios acumulados<a class="anchor-link" href="#2.3-Determinar-radios-acumulados">&#182;</a></h2><p>Dado que es de interes determinar si se tiene madera de compresión en el crecimiento del tronco anual es necesario determinar que partes del perfil corresponden a cada año de crecimiento. Se brindan dos opciones para determinar estos radios. La más precisa requiere que el usuario lo determine marcando los mismos de manera manual. La segunda opción, más práctica, utiliza técnicas de procesamiento de señales para seleccionar los mismos.</p>
+<p>Por otro lado, cuándo lo que se desea es extraer el perfil dado por dos puntos indicados por el usuario, se extrae el perfil del segmento determinado por ambos puntos. Dados los puntos ($x_{1}$,$y_{1}$) y ($x_{2}$,$y_{2}$) se tiene que la recta determinada por ambos (y = mx+n) cumple:</p>
+<ul>
+<li>m = $\frac{y1-y2}{x1-x2}$</li>
+<li>n = $y1-m*x1$</li>
+</ul>
+<p>Por lo que los pixeles de interes son aquellos con coordenadas pertenecientes al segmento determinado por ($x_{1}$,$y_{1}$) y ($x_{2}$,$y_{2}$)</p>
+
+</div>
+</div>
+</div></section><section>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="2.3-Determinar-radios-acumulados">2.3 Determinar radios acumulados<a class="anchor-link" href="#2.3-Determinar-radios-acumulados">&#182;</a></h2><p>Dado que es de interes determinar si se tiene madera de compresión en el crecimiento del tronco anual es necesario determinar que partes del perfil corresponden a cada año de crecimiento. Se brindan dos opciones para determinar estos radios. La más precisa requiere que el usuario lo determine marcando los mismos de manera manual. La segunda opción, más práctica, utiliza técnicas de procesamiento de señales para seleccionar los mismos. En esté caso se aplica un filtro de hanning de media movil a la señal. A la señal obtenida se le calculan los picos utilizando la función de la biblioteca <strong>scipy</strong> <code>find_peaks</code></p>
 
 </div>
 </div>
@@ -13406,6 +13427,13 @@ a.anchor-link {
 <div class="text_cell_render border-box-sizing rendered_html">
 <h1 id="3-Software">3 Software<a class="anchor-link" href="#3-Software">&#182;</a></h1><p>El código de la aplicación se encuentra en el repositorio GitHub <a href="https://github.com/hmarichal93/deteccionMadera">https://github.com/hmarichal93/deteccionMadera</a></p>
 
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="3.1-Bibliotecas-utilizadas">3.1 Bibliotecas utilizadas<a class="anchor-link" href="#3.1-Bibliotecas-utilizadas">&#182;</a></h2>
 </div>
 </div>
 </div></section></section><section><section>
@@ -13579,6 +13607,15 @@ a.anchor-link {
 </div>
 </div>
 
+</div></section></section><section><section>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="5-Analisis-de-Resultados">5 Analisis de Resultados<a class="anchor-link" href="#5-Analisis-de-Resultados">&#182;</a></h1><h2 id="5.1-Selecci&#243;n-de-caracter&#237;sticas">5.1 Selecci&#243;n de caracter&#237;sticas<a class="anchor-link" href="#5.1-Selecci&#243;n-de-caracter&#237;sticas">&#182;</a></h2><p>No se observan mejoras al utilizar la imagen en color
+Entrenamiento.</p>
+
+</div>
+</div>
 </div></section></section><section><section>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">

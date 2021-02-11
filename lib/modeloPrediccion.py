@@ -8,6 +8,7 @@ Created on Sun Feb  7 11:49:33 2021
 #bibliotecas propias
 import utils 
 import features
+
 #bibliotecas externas
 import imageio 
 import numpy as np
@@ -168,8 +169,8 @@ debug = True
 #filename = ['L4Ab.tif','F2Ab.tif','F10A.tif','L7A.tif','L4A.tif','F10B.tif','F4B.tif','F2A.tif','F2B.tif']
 #centros =[[1189,1255],[1208,1300],[888,779],[1062,1123],[1061,1061],[850,968],[1038,1068],[902,880],[1030,1067],[1004,990]] 
 databaseName = "baseDeDatosAMano.txt"
-databaseBig = "datosCrudos.txt"
-base='base/sinManchas/'
+databaseBig = "../modelos/datosCrudosReducido.txt"
+base='../base/sinManchas/'
 filename = ['F10A.tif','F10B.tif','F2Ab.tif','F2B.tif','F4A.tif','F4A_rot.tif']
 centros =  [ [888,779],[850,968],[1208,1300],[1039,1068],[1033,878],[1019,826] ]
 #indice=1 no sirve para base
@@ -192,12 +193,12 @@ if debug:
 
 #%%
 ## Extraer los subPerfiles (perfil por radio)
-#perfiles = utils.extraerPerfiles(img_seg, centro,debug=True)
+perfiles = utils.extraerPerfiles(img_seg, centro,debug=True)
 
 #%%
 debug = True
 segmento = True
-automatico = False
+automatico = True
 
 if automatico:
     archivo = filename[indice]

@@ -151,7 +151,7 @@ if __name__=="__main__":
     
     debug = True
     if debug:
-        utils.image_show(image)
+        utils.image_show(im)
     print(detectarCorteEnOctante( img_seg, centro, debug = debug))
         
 
